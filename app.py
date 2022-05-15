@@ -5,7 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
 from flask_bcrypt import Bcrypt
-from time import sleep
 
 app = Flask(__name__)
 app.secret_key = "mlask"

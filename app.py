@@ -33,7 +33,7 @@ class RegisterForm(FlaskForm):
 # Adjust the code should you have other names for them
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "Bootable10"
+app.config["MYSQL_PASSWORD"] = "PASSWORD"
 app.config["MYSQL_DB"] = "reservation system"
 
 #login_manager = LoginManager()

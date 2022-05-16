@@ -7,7 +7,11 @@
     <title>Main page</title>
 </head>
 <body>
-    <a href="{{ url_for('register') }}">REGISTER</a>  <a href="{{ url_for('login') }}">LOGIN</a>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}">DASHBOARD</a>
+    {% else %}
+    <a href="{{ url_for('register') }}">REGISTER</a> <a href="{{ url_for('login') }}">LOGIN</a>
+    {% endif %}
     <h1>WE NEED THE FCKING MAIN PAGE</h1>
 </body>
 </html>

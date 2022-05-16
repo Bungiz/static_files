@@ -1,6 +1,6 @@
 from flask import Flask, redirect, request, render_template, url_for
 from flask_mysqldb import MySQL
-from flask_login import login_required, logout_user
+from flask_login import UserMixin, login_required, logout_user, LoginManager, current_user, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
@@ -36,11 +36,25 @@ app.config["MYSQL_USER"] = "root"
 app.config["MYSQL_PASSWORD"] = "Bootable10"
 app.config["MYSQL_DB"] = "reservation system"
 
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = "SOMETHING"
+#login_manager.login_message = "SOMETHING"
+
+#@login_manager.user_loader
+#def load_user(user_id):
+#    return User.get(user_id)
+
+@app.route("/user/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
+
 @app.route("/user/logout")
 @login_required
 def logout():
     logout_user()
-    redirect("/")
+    return redirect("/")
 
 @app.route("/user/register", methods=["GET", "POST"])
 def register():
@@ -66,10 +80,28 @@ def register():
             return "<h2>New user [" + form.user_name.data + "] has been registered.</h2><a href='/'>Go to HOME page</a>" # NEEDS SOME TWEAKING, it is an alpha version after all
     return render_template("register.html", form=form)
 
-@app.route("/user/login")
+@app.route("/user/login", methods=["GET", "POST"])
 def login():
-    # bcrypt.check_password_hash(hash, password) Returns True/False
-    pass
+    form = LoginForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT psd FROM users WHERE username = '" + form.user_name.data + "'")
+            data = cursor.fetchall()
+            text = ""
+            cursor.close()
+
+            for each in data:
+                text += str(each)
+            text = text[2:-3]
+
+            if bcrypt.check_password_hash(text, form.password.data):
+                #user = User(form.user_name.data, form.password.data)
+                #login_user(user)
+                return redirect("/user/dashboard")
+            else:
+                return "<h2>Incorrect password or this user isn't registered.</h2><a href='/'>Go to HOME page</a>"
+    return render_template("login.html", form=form)
 
 # ---------------END LOGIN-------------------------
 

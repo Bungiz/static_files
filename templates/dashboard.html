@@ -7,8 +7,11 @@
     <title>Dashboard</title>
 </head>
 <body>
-    This will be the Dashboard.<br>
-    Welcome {{ current_user.username }}<br>
+    <h2>This will be the Dashboard.</h2><br>
+    Welcome user [{{ current_user.username }}]<br>
+    Is authenticated: {{ current_user.is_authenticated }}<br>
+    Is active: {{ current_user.is_active }}<br>
+    Is anonymous: {{ current_user.is_anonymous }}<br>
     <a href="/user/logout">CLICK HERE TO LOG OUT</a>
 </body>
 </html>
